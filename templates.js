@@ -1,23 +1,13 @@
-module.exports.container_start = e =>
-`Started container <b>${e.Actor.Attributes.name}</b>
-Image: <b>${e.Actor.Attributes.image}</b>
-Container ID: <b>${e.Actor.ID}</b>`;
+module.exports = {
+    container_start: e =>
+        `Started <b>${e.Actor.Attributes.name} (${e.Actor.Attributes.image}) {${e.Actor.ID.substr(0, 12)}}</b>`,
 
-module.exports.container_kill = e =>
-`Stopped container <b>${e.Actor.Attributes.name}</b>
-Image: <b>${e.Actor.Attributes.image}</b>
-Exit Code: <b>${e.Actor.Attributes.exitCode}</b>
-Container ID: <b>${e.Actor.ID}</b>`;
+    container_die: e =>
+        `Stopped <b>${e.Actor.Attributes.name} (${e.Actor.Attributes.image}) {${e.Actor.ID.substr(0, 12)}}</b>\nExit Code: <b>${e.Actor.Attributes.exitCode}</b>`,
 
-module.exports.container_die = module.exports.container_kill;
+    'container_health_status: healthy': e =>
+        `Status <b>Healthy</b> for <b>${e.Actor.Attributes.name} (${e.Actor.Attributes.image}) {${e.Actor.ID.substr(0, 12)}}</b>`,
 
-module.exports.container_destroy = e =>
-`Destroyed container <b>${e.Actor.Attributes.name}</b>
-Image: <b>${e.Actor.Attributes.image}</b>
-Container ID: <b>${e.Actor.ID}</b>`;
-
-module.exports.network_create = e =>
-`Created network \`${e.Actor.Attributes.name}\``;
-
-module.exports.network_destroy = e =>
-`Destroyed network \`${e.Actor.Attributes.name}\``;
+    'container_health_status: unhealthy': e =>
+        `Status <b>Unhealthy</b> for <b>${e.Actor.Attributes.name} (${e.Actor.Attributes.image}) {${e.Actor.ID.substr(0, 12)}}</b>`,
+};

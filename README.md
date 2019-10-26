@@ -1,6 +1,6 @@
-# docker-telegram-notifier
+# Docker Telegram Notifier
 
-A Telegram integration to notify Docker events inspired by ***slack-notifier***.
+A Telegram integration to notify Docker events. This service notifies about container starts, stops, restarts, and changes of Docker healthcheck status.
 
 ## How to Run
 
@@ -10,26 +10,23 @@ Run a container as follows:
 
 ```sh
 # Docker
-docker run -d -e TELEGRAM_NOTIFIER_BOT_TOKEN=token -e TELEGRAM_NOTIFIER_CHAT_ID=chat_id -v /var/run/docker.sock:/var/run/docker.sock arefaslani/docker-telegram-notifier
+docker run -d --env TELEGRAM_NOTIFIER_BOT_TOKEN=token --env TELEGRAM_NOTIFIER_CHAT_ID=chat_id --volume /var/run/docker.sock:/var/run/docker.sock:ro poma/docker-telegram-notifier
 
 # Docker Compose
-curl -O https://raw.githubusercontent.com/arefaslani/docker-telegram-notifier/master/docker-compose.yml
+curl -O https://raw.githubusercontent.com/poma/docker-telegram-notifier/master/docker-compose.yml
 docker-compose up -d
 ```
 
-### Filter events by image name
+## Blacklist and Whitelist
 
-By default all events are sent to Slack, but events can be filtered by the environment variable `image_regexp` as follows:
+You can suppress notifications from certain containers by adding a label `--label telegram-notifier.monitor=false` to them. If you want to receive notifications only from whitelisted containers, set `--env ONLY_WHITELIST=true` environment variable on the notifier instance, and `--label telegram-notifier.monitor=true` label on the containers you want to monitor.
 
-```sh
-# show events only from node
--e image_regexp='^node:'
+## Remote docker instance
 
-# show events but exclude from node
--e image_regexp='^(?!node:)'
-```
+By default notifier connects to a local docker instance (don't forget to specify `--volume /var/run/docker.sock:/var/run/docker.sock:ro` for this case). But if you have monitoring and the service on the same host, you will not receive notifications if the host goes down. So I recommend to have monitoring separately.
 
+Notifier accepts usual `DOCKER_HOST` and `DOCKER_CERT_PATH` environment variables to specify remote instance. For http endpoint you need to specify only `--env DOCKER_HOST=tcp://example.com:2375` (make sure to keep such instances behind the firewall). For https, you'll also need to mount a volume with https certificates that contains `ca.pem`, `cert.pem`, and `key.pem`: `--env DOCKER_HOST=tcp://example.com:2376 --env DOCKER_CERT_PATH=/certs --volume $(pwd):/certs`
 
-## Contribution
+## docker-compose
 
-Please let me know an issue or pull request.
+For docker-compose examples see comments in [docker-compose.yml](./docker-compose.yml) file.

@@ -1,19 +1,21 @@
-const {Seq} = require('immutable');
 const Docker = require('dockerode');
 const TelegramClient = require('./telegram');
 const JSONStream = require('JSONStream');
 const templates = require('./templates');
 
-const imageRegExp = new RegExp(process.env.image_regexp);
+const { ONLY_WHITELIST } = process.env;
 const docker = new Docker();
 const telegram = new TelegramClient();
 
 async function sendEvent(event) {
-  console.info(event);
-  if (imageRegExp.test(event.from)) {
-    const template = templates[`${event.Type}_${event.Action}`];
-    if (template) {
+  // console.debug(event);
+  const template = templates[`${event.Type}_${event.Action}`];
+  if (template) {
+    const label = event.Actor && event.Actor.Attributes && event.Actor.Attributes['telegram-notifier.monitor'];
+    const shouldMonitor = label === undefined ? undefined : label.toLowerCase().trim() !== 'false';
+    if (shouldMonitor || !ONLY_WHITELIST && shouldMonitor !== false) {
       const attachment = template(event);
+      console.log(attachment, "\n");
       await telegram.send(attachment)
     }
   }
@@ -28,9 +30,9 @@ async function sendEventStream() {
 
 async function sendVersion() {
   const version = await docker.version();
-  const text = 'Docker is running';
-  Seq(version).map((value, title) => text += `${title}: <b>${value}</b>`);
-  telegram.send(text);
+  let text = `Connected to docker ${version.Version}`;
+  console.log(text, "\n");
+  await telegram.send(text);
 }
 
 async function main() {
