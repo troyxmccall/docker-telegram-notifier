@@ -19,6 +19,10 @@ class TelegramClient {
         `Error: ${e}`,
     );
   }
+
+  check() {
+    return this.telegram.getMe();
+  }
 }
 
 module.exports = TelegramClient;

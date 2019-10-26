@@ -7,4 +7,5 @@ COPY package.json package-lock.json /usr/src/app/
 RUN npm install && npm cache clean --force
 COPY . /usr/src/app
 
-CMD ["npm", "start"]
+HEALTHCHECK CMD ["npm", "run", "healthcheck"]
+CMD ["npm", "run", "start"]

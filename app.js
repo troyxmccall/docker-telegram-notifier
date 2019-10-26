@@ -40,9 +40,34 @@ async function main() {
   await sendEventStream();
 }
 
+async function healthcheck() {
+  try {
+    await docker.version();
+  } catch (e) {
+    console.error(e);
+    console.error("Docker is unavailable");
+    process.exit(101);
+  }
+
+  try {
+    console.log(await telegram.check());
+  } catch (e) {
+    console.error(e);
+    console.error("Telegram API is unavailable");
+    process.exit(102);
+  }
+
+  console.log("OK");
+  process.exit(0);
+}
+
 function handleError(e) {
   console.error(e);
   telegram.sendError(e).catch(console.error);
 }
 
-main().catch(handleError);
+if (process.argv.includes("healthcheck")) {
+  healthcheck();
+} else {
+  main().catch(handleError);
+}
