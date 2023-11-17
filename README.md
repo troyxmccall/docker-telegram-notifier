@@ -5,6 +5,7 @@ Cross-platform `amd64`/`arm64` Telegram integration to notify Docker events.
 
 This service notifies about container `start`, `stop`, `restart` events, and changes of Docker healthcheck status. If you wish you can add more event notifications in `templates.js` file.
 
+
 ## How to Run
 
 [Set up a telegram bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot) and get the `Bot Token`. then add the bot to a group and make it admin and [extract the Chat ID](https://stackoverflow.com/a/32572159/882223).
@@ -13,7 +14,7 @@ Run a container as follows:
 
 ```sh
 # Docker
-docker run -d --env TELEGRAM_NOTIFIER_BOT_TOKEN=token --env TELEGRAM_NOTIFIER_CHAT_ID=chat_id --volume /var/run/docker.sock:/var/run/docker.sock:ro poma/docker-telegram-notifier
+docker run -d --env TELEGRAM_NOTIFIER_BOT_TOKEN=token --env TELEGRAM_NOTIFIER_CHAT_ID=chat_id --volume /var/run/docker.sock:/var/run/docker.sock:ro troyxmccall/docker-telegram-notifier
 
 # Docker Compose
 curl -O https://raw.githubusercontent.com/troyxmccall/docker-telegram-notifier/master/docker-compose.yml
@@ -34,3 +35,7 @@ Tutorial on how to generate docker certs can be found [here](https://docs.docker
 ## docker-compose
 
 For docker-compose examples see comments in [docker-compose.yml](./docker-compose.yml) file.
+
+## Docker Hub:
+
+https://hub.docker.com/r/troyxmccall/docker-telegram-notifier
