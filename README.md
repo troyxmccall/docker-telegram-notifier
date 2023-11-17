@@ -1,6 +1,9 @@
-# Docker Telegram Notifier [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/poma/docker-telegram-notifier.svg)](https://hub.docker.com/r/poma/docker-telegram-notifier/builds)
+# Docker Telegram Notifier ![docker build status](https://github.com/troyxmccall/docker-telegram-notifier/actions/workflows/deploy-docker.yml/badge.svg)
 
-A Telegram integration to notify Docker events. This service notifies about container `start`, `stop`, `restart` events, and changes of Docker healthcheck status. If you wish you can add more event notifications in `templates.js` file.
+A Modern `Node v18` and `Alpine 3.18` 
+Cross-platform `amd64`/`arm64` Telegram integration to notify Docker events. 
+
+This service notifies about container `start`, `stop`, `restart` events, and changes of Docker healthcheck status. If you wish you can add more event notifications in `templates.js` file.
 
 ## How to Run
 
@@ -13,7 +16,7 @@ Run a container as follows:
 docker run -d --env TELEGRAM_NOTIFIER_BOT_TOKEN=token --env TELEGRAM_NOTIFIER_CHAT_ID=chat_id --volume /var/run/docker.sock:/var/run/docker.sock:ro poma/docker-telegram-notifier
 
 # Docker Compose
-curl -O https://raw.githubusercontent.com/poma/docker-telegram-notifier/master/docker-compose.yml
+curl -O https://raw.githubusercontent.com/troyxmccall/docker-telegram-notifier/master/docker-compose.yml
 docker-compose up -d
 ```
 
