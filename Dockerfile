@@ -1,25 +1,11 @@
 FROM --platform=$TARGETPLATFORM node:18-alpine
 
-# Create app directory and non-root user
-RUN mkdir -p /usr/src/app && \
-    addgroup -S notifications && \
-    adduser -S telegram -G notifications && \
-    chown -R telegram:notifications /usr/src/app
-
-# Set working directory
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-# Switch to non-root user
-USER telegram
-
-# Copy package files with correct ownership
-COPY --chown=telegram:notifications package.json package-lock.json ./
-
-# Install dependencies
+COPY package.json package-lock.json /usr/src/app/
 RUN npm install && npm cache clean --force
-
-# Copy application code with correct ownership
-COPY --chown=telegram:notifications . .
+COPY . /usr/src/app
 
 HEALTHCHECK CMD ["npm", "run", "healthcheck"]
 CMD ["npm", "run", "start"]
