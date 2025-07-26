@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM node:18-alpine
+FROM --platform=$TARGETPLATFORM node:22-alpine3.22
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
