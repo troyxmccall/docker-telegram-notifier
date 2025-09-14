@@ -1,6 +1,6 @@
 # Docker Telegram Notifier ![docker build status](https://github.com/troyxmccall/docker-telegram-notifier/actions/workflows/deploy-docker.yml/badge.svg)
 
-A Modern `Node v18` and `Alpine 3.18` 
+A Modern `Node v22` and `Alpine 3.22` 
 Cross-platform `amd64`/`arm64` Telegram integration to notify Docker events. 
 
 This service notifies about container `start`, `stop`, `restart` events, and changes of Docker healthcheck status. If you wish you can add more event notifications in `templates.js` file.
