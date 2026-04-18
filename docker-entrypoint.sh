@@ -2,6 +2,11 @@
 set -eu
 
 SOCKET_PATH="${DOCKER_SOCKET_PATH:-/var/run/docker.sock}"
+RUN_AS_ROOT="${RUN_AS_ROOT:-false}"
+
+if [ "$RUN_AS_ROOT" = "true" ] || [ "$RUN_AS_ROOT" = "1" ]; then
+  exec "$@"
+fi
 
 if [ -S "$SOCKET_PATH" ]; then
   socket_gid="$(stat -c '%g' "$SOCKET_PATH")"

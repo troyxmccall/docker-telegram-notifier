@@ -3,6 +3,7 @@ version: "2.2"
 services:
   notifier:
     image: troyxmccall/docker-telegram-notifier
+    user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro # for local instance
       # - ./certs:/certs # for remote instance
@@ -12,6 +13,7 @@ services:
       TELEGRAM_NOTIFIER_BOT_TOKEN:
       TELEGRAM_NOTIFIER_CHAT_ID:
       # optional args
+      RUN_AS_ROOT: "true"
       # ONLY_WHITELIST: true
       # DOCKER_HOST: tcp://example.com:2376 # http/https is detected by port number
       # DOCKER_CERT_PATH: /certs # should contain ca.pem, cert.pem, key.pem

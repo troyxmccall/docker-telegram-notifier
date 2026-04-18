@@ -14,14 +14,16 @@ Run a container as follows:
 
 ```sh
 # Docker
-docker run -d --env TELEGRAM_NOTIFIER_BOT_TOKEN=token --env TELEGRAM_NOTIFIER_CHAT_ID=chat_id --volume /var/run/docker.sock:/var/run/docker.sock:ro troyxmccall/docker-telegram-notifier
+docker run -d --user root --env RUN_AS_ROOT=true --env TELEGRAM_NOTIFIER_BOT_TOKEN=token --env TELEGRAM_NOTIFIER_CHAT_ID=chat_id --volume /var/run/docker.sock:/var/run/docker.sock:ro troyxmccall/docker-telegram-notifier
 
 # Docker Compose
 curl -O https://raw.githubusercontent.com/troyxmccall/docker-telegram-notifier/master/docker-compose.yml
 docker-compose up -d
 ```
 
-The image starts as `root` only long enough to match the mounted Docker socket group, then drops to the unprivileged `node` user before running the notifier. This avoids the common `connect EACCES /var/run/docker.sock` failure when the socket is mounted with host-specific group ownership.
+For local socket mounts, run the container as `root` and set `RUN_AS_ROOT=true`. Some hosts still reject access to `/var/run/docker.sock` after group remapping, and staying `root` avoids the recurring `connect EACCES /var/run/docker.sock` failure.
+
+If you prefer the least-privilege path, omit `RUN_AS_ROOT`. The image will start as `root` only long enough to match the mounted Docker socket group, then drop to the unprivileged `node` user before running the notifier.
 
 ## Blacklist and Whitelist
 
