@@ -1,11 +1,15 @@
-FROM --platform=$TARGETPLATFORM node:22-alpine3.22
+FROM --platform=$TARGETPLATFORM node:24-alpine3.23
 
-RUN mkdir -p /usr/src/app
+ENV NODE_ENV=production
+
+RUN mkdir -p /usr/src/app && chown -R node:node /usr/src/app
 WORKDIR /usr/src/app
 
-COPY package.json package-lock.json /usr/src/app/
-RUN npm install && npm cache clean --force
-COPY . /usr/src/app
+COPY --chown=node:node package.json package-lock.json /usr/src/app/
+RUN npm ci --omit=dev && npm cache clean --force
+COPY --chown=node:node . /usr/src/app
+
+USER node
 
 HEALTHCHECK CMD ["npm", "run", "healthcheck"]
 CMD ["npm", "run", "start"]
