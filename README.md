@@ -21,6 +21,8 @@ curl -O https://raw.githubusercontent.com/troyxmccall/docker-telegram-notifier/m
 docker-compose up -d
 ```
 
+The image starts as `root` only long enough to match the mounted Docker socket group, then drops to the unprivileged `node` user before running the notifier. This avoids the common `connect EACCES /var/run/docker.sock` failure when the socket is mounted with host-specific group ownership.
+
 ## Blacklist and Whitelist
 
 You can suppress notifications from certain containers by adding a label `--label telegram-notifier.monitor=false` to them. If you want to receive notifications only from whitelisted containers, set `--env ONLY_WHITELIST=true` environment variable on the notifier instance, and `--label telegram-notifier.monitor=true` label on the containers you want to monitor.
